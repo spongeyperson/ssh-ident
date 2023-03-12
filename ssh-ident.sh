@@ -10,7 +10,8 @@ esac
 if [ "$choice" = "y" ]; then
     read -p "Enter username: " username
     read -p "Enter IP address: " ip_address
-    read -p "Enter hostname: " hostname
+    read -p "Enter hostname (without .local): " hostname
+    hostname="${hostname%.local}"
 
     # Create SSH identity files
     private_key=~/.ssh/ssh-identities/$hostname
@@ -27,7 +28,7 @@ if [ "$choice" = "y" ]; then
     echo "SSH Public Key Copied to $hostname"
 
     # Append host configuration to ~/.ssh/config
-    printf "Host $hostname $hostname.local\n\
+    printf "Host $hostname\n\
         Hostname $ip_address\n\
         IdentityFile $private_key\n\
         User $username\n" >> ~/.ssh/config
