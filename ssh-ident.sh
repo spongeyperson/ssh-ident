@@ -1,5 +1,11 @@
 #!/bin/bash
-
+echo -e "\e[0m"
+echo -e "\e[96m##################################"
+echo -e "\e[96m# Welcome to \e[93mSpongey's\e[0m           \e[96m#\e[0m"
+echo -e "\e[96m# \e[4mNo Excuses\e[0m \e[96mSSH Security Script #\e[0m"
+echo -e "\e[96m# \e[31mrev. 4\e[0m                         \e[96m#\e[0m"
+echo -e "\e[96m##################################"
+echo -e "\e[0m"
 echo -e "\e[34m::\e[37m Do you want to configure SSH identities? (y/N)\e[0m"
 echo -e "\e[32m==> \e[0m\c\r"; read choice
 case "$choice" in
@@ -29,7 +35,7 @@ if [ "$choice" = "y" ]; then
     # Copy identity file to remote host
     echo -e "\e[32m==\e[0m"
     ssh-copy-id -i "$public_key" "$username@$ip_address"
-    echo -e "\e[32m==✅ \e[0mSSH Public Key Copied to $hostname"
+    echo -e "\e[32m==✅ \e[0mSSH Public Key Copied to \e[4m$hostname"
 
     # Append host configuration to ~/.ssh/config
     printf "Host $hostname\n\
