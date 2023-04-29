@@ -1,10 +1,13 @@
 #!/bin/bash
+
+#Greeting
 echo -e "\e[0m"
 echo -e "\e[96m##################################"
 echo -e "\e[96m# Welcome to \e[93mSpongey's\e[0m           \e[96m#\e[0m"
 echo -e "\e[96m# \e[4mNo Excuses\e[0m \e[96mSSH Security Script #\e[0m"
 echo -e "\e[96m# \e[31mrev. 4.1\e[0m                         \e[96m#\e[0m"
 echo -e "\e[96m##################################"
+# Reset, then ask user to continue script
 echo -e "\e[0m"
 echo -e "\e[34m::\e[37m Do you want to configure SSH identities? (y/N)\e[0m"
 echo -e "\e[32m==> \e[0m\c\r"; read choice
@@ -13,6 +16,7 @@ case "$choice" in
     * ) choice="n";;
 esac
 
+# Ask user for Username, IP Address, Port Number, and Hostname of SSH Identities
 if [ "$choice" = "y" ]; then
     echo -e "\e[34m::\e[37m Enter Username: \e[0m"
     echo -e "\e[32m==> \e[0m\c\r"; read username
@@ -25,7 +29,17 @@ if [ "$choice" = "y" ]; then
     echo -e "\e[32m==> \e[0m\c\r"; read hostname
     hostname="${hostname%.local}"
 
-## Prompt user
+# Prompt user to create ssh-identities directory if it doesn't exist
+ssh_identities_dir=~/.ssh/ssh-identities
+if [ ! -d "$ssh_identities_dir" ]; then
+    echo -e "\e[34m::\e[37m $ssh_identities_dir does not exist. Do you want to create it? (y/N)\e[0m"
+    echo -e "\e[32m==> \e[0m\c\r"; read create_ssh_identities_dir
+    case "$create_ssh_identities_dir" in
+        y|Y|yes|YES ) mkdir -p "$ssh_identities_dir";;
+        * ) echo -e "\e[31m❌ \e[0mSSH identity configuration skipped.\e[0m"; exit 1;;
+    esac
+fi
+
 
     # Create SSH identity files
     private_key=~/.ssh/ssh-identities/$hostname
