@@ -11,9 +11,27 @@
 
 #USE THIS SCRIPT AT YOUR OWN RISK.
 
+
+############# DEV
+
+## TO DO List:
 #TODO: Allow User to configure encryption bits. Default to 4096 and only allow that as minimum
 #TODO: Make Reverse script which deletes known identity files and / or incorporate into this script.
 
+
+
+#####key######
+#- unfinished
+#x finished
+#####key######
+
+##Issues:
+#- entering no hostname tries to rename ~/.ssh/identities and fails to fail
+#x no port default 22
+#- no check for existing file, hostname should come first.
+#- ssh-copy-id is failing with `too many arguments, expected a target hostname, got: <blank>`
+
+############# DEV
 
 # Greeting
 echo -e "\e[0m"
