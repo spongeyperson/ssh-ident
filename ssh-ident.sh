@@ -1,13 +1,30 @@
 #!/bin/bash
+#Spongey's Shitty SSH Security Script.
+#Revision v5.0
+#Copyright 2023 spongeyperson
+#https://spongey.xyz
+#tyler@spongey.xyz
 
-#Greeting
+#This script was created with the help of online tools. I do not pretend
+#to know how to make scripts or program anything (at the time of writing this).
+#This script is a learning experience for me. 
+
+#USE THIS SCRIPT AT YOUR OWN RISK.
+
+#TODO: Allow User to configure encryption bits. Default to 4096 and only allow that as minimum
+#TODO: Make Reverse script which deletes known identity files and / or incorporate into this script.
+
+
+# Greeting
 echo -e "\e[0m"
 echo -e "\e[96m##################################"
 echo -e "\e[96m# Welcome to \e[93mSpongey's\e[0m           \e[96m#\e[0m"
 echo -e "\e[96m# \e[4mNo Excuses\e[0m \e[96mSSH Security Script #\e[0m"
-echo -e "\e[96m# \e[31mrev. 4.1\e[0m                         \e[96m#\e[0m"
+echo -e "\e[96m# \e[31mrev. 5.0\e[0m                       \e[96m#\e[0m"
 echo -e "\e[96m##################################"
 # Reset, then ask user to continue script
+
+# Ask User to configure SSH Identities
 echo -e "\e[0m"
 echo -e "\e[34m::\e[37m Do you want to configure SSH identities? (y/N)\e[0m"
 echo -e "\e[32m==> \e[0m\c\r"; read choice
@@ -18,16 +35,40 @@ esac
 
 # Ask user for Username, IP Address, Port Number, and Hostname of SSH Identities
 if [ "$choice" = "y" ]; then
-    echo -e "\e[34m::\e[37m Enter Username: \e[0m"
-    echo -e "\e[32m==> \e[0m\c\r"; read username
-    echo -e "\e[34m::\e[37m Enter IP Address: \e[0m"
-    echo -e "\e[32m==> \e[0m\c\r"; read ip_address
-    echo -e "\e[34m::\e[37m Enter Port: \e[0m"
-    echo -e "\e[32m==> \e[0m\c\r"; read port_number
-    echo -e "\e[34m::\e[37m Enter Hostname: \e[0m"
-    echo -e "\e[34m::\e[31m\e[5m \e[7mDO NOT\e[0m\e[31m append .local"
-    echo -e "\e[32m==> \e[0m\c\r"; read hostname
+    read -p $'\e[34m::\e[37m Enter Username: \e[0m' username
+    while [ -z "$username" ]; do
+        read -p $'\e[31m❗ Username cannot be empty. Please enter a valid Username\e[0m\n\e[34m::\e[37m Enter Username: \e[0m' username
+    done
+
+    read -p $'\e[34m::\e[37m Enter IP Address: \e[0m' ip_address
+    while [ -z "$ip_address" ]; do
+        read -p $'\e[31m❗ IP Address cannot be empty. Please enter a valid IP Address\e[0m\n\e[34m::\e[37m Enter IP Address: \e[0m' ip_address
+    done
+
+# Ask user for port number. Only allow port number that is valid (0-65535), no input = port 22 default.
+while true; do
+    read -p $'\e[34m::\e[37m Enter Port (default: 22): \e[0m' port_number
+    port_number=${port_number:-22}
+
+    # Check if the input is a number
+    if [[ $port_number =~ ^[0-9]+$ ]]; then
+        # Check if the number is within the allowed range
+        if ((port_number >= 0 && port_number <= 65535)); then
+            break  # Valid input, exit the loop
+        else
+            echo -e "\e[31m❗ Invalid port number. Please enter a number within the range 0-65535.\e[0m"
+        fi
+    else
+        echo -e "\e[31m❗ Invalid input. Please enter a valid number.\e[0m"
+    fi
+done
+
+    read -p $'\e[34m::\e[37m Enter Hostname: \e[0m' hostname
+    while [ -z "$hostname" ]; do
+        read -p $'\e[31m❗ Hostname cannot be empty. Please enter a valid Hostname\e[0m\n\e[34m::\e[37m Enter Hostname: \e[0m' hostname
+    done
     hostname="${hostname%.local}"
+
 
 # Prompt user to create ssh-identities directory if it doesn't exist
 ssh_identities_dir=~/.ssh/ssh-identities
@@ -44,7 +85,7 @@ fi
     # Create SSH identity files
     private_key=~/.ssh/ssh-identities/$hostname
     public_key="$private_key.pub"
-    ssh-keygen -t rsa -b 4096 -f "$private_key" -C "$username@$hostname" -N ""
+    ssh-keygen -t rsa -b 4096 -f "$private_key" -C "$username@$hostname" #-N ""
 
     echo -e "\e[32m==✅ \e[0mSSH identity of \e[5m\e[4mhostname\e[0m created.\e[0m"
     echo -e "  \e[31mPrivate Key Location:\e[0m $private_key"
@@ -52,7 +93,7 @@ fi
 
     # Copy identity file to remote host
     echo -e "\e[32m==\e[0m"
-    ssh-copy-id -i "$public_key" "$username@$ip_address" -p "$port_number"
+    ssh-copy-id -i "$public_key" -p "$port_number" "$username@$ip_address" 
     echo -e "\e[32m==✅ \e[0mSSH Public Key Copied to \e[4m$hostname"
 
     # Append host configuration to ~/.ssh/config
