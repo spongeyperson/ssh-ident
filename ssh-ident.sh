@@ -1,6 +1,6 @@
 #!/bin/bash
 #Spongey's Shitty SSH Security Script.
-#Revision v5.0
+#Revision v5.0-WSL
 #Copyright 2023 spongeyperson
 #https://spongey.xyz
 #tyler@spongey.xyz
@@ -44,15 +44,19 @@
 ############# DEV
 
 ## Define Global Version
-version=5.0
+version="5.0-WSL"
 ## Main (Original) Greeting
 clear
 echo -e "\e[0m"
 echo -e "\e[96m##################################"
 echo -e "\e[96m# Welcome to \e[93mSpongey's\e[0m           \e[96m#\e[0m"
 echo -e "\e[96m# \e[4mNo Excuses\e[0m \e[96mSSH Security Script #\e[0m"
-echo -e "\e[96m# \e[31mrev. $version\e[0m                       \e[96m#\e[0m"
+echo -e "\e[96m# \e[31mrev. $version\e[0m                   \e[96m#\e[0m"
 echo -e "\e[96m##################################"
+echo -e "\e[0m"
+echo -e "\e[41m\e[31mWARNING:\e[0m\e[96m Experimental WSL Version!!!"
+echo -e "\e[41mUSE AT YOUR OWN RISK"
+
 
 ## Ask User to configure SSH Identities, if not, exit script.
 echo -e "\e[0m"
@@ -177,7 +181,7 @@ done
 
 
 # Prompt user to create ssh-identities directory if it doesn't exist. **ONLY IF** it doesn't exist. Otherwise skip
-ssh_identities_dir=~/.ssh/ssh-identities
+ssh_identities_dir=/mnt/c/Users/Tyler/.ssh/ssh-identities
 if [ ! -d "$ssh_identities_dir" ]; then
     echo -e "\e[34m::\e[37m $ssh_identities_dir does not exist. Do you want to create it? (y/N)\e[0m"
     echo -e "\e[32m==> \e[0m\c\r"; read create_ssh_identities_dir
@@ -199,7 +203,7 @@ echo -e "\e[34m::\e[37m Transferring Input to \e[93mssh-keygen\e[0m\e[37m...\e[0
 
 
     # Create SSH identity files
-    private_key=~/.ssh/ssh-identities/$hostname
+    private_key=/mnt/c/Users/Tyler/.ssh/ssh-identities/$hostname
     public_key="$private_key.pub"
     ssh-keygen -t rsa -b 4096 -f "$private_key" -C "$username@$hostname" #-N ""
     echo -e "\n\e[34m::\e[37m Press \e[4mEnter\e[0m\e[37m to continue this script.\e[0m"
@@ -226,7 +230,7 @@ echo -e "\e[34m::\e[37m Transferring Input to \e[93mssh-keygen\e[0m\e[37m...\e[0
         Hostname $ip_address\n\
         Port $port_number\n\
         IdentityFile $private_key\n\
-        User $username\n" >> ~/.ssh/config
+        User $username\n" >> /mnt/c/Users/Tyler/.ssh/config
 
 
     echo -e "\e[32m==✅ \e[0mSSH identity configuration complete.\e[0m"
