@@ -11,17 +11,7 @@
 
 #USE THIS SCRIPT AT YOUR OWN RISK.
 
-
 ############# DEV
-
-## TO DO List:
-#TODO: Add Invalid IP Address Check
-#TODO: Allow User to configure encryption bits. Default to 4096 and only allow that as minimum
-#TODO: Make Reverse script which deletes known identity files and / or incorporate into this script.
-#TODO: Globalize Greeting (Will be done in next release) 
-#TODO: Check if user put in the full username (user@ipaddress) in the "Enter Username" Field.
-
-
 
 #####key######
 #- unfinished
